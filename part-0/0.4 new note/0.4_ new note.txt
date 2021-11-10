@@ -1,0 +1,54 @@
+title 0.4: new note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+
+note over browser:
+Browser starts executing js-code
+that requests JSON data from server 
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{content: "hello", date: "2021-11-09T12:27:46.693Z"},…]
+
+note over browser:
+Browser executes the event handler
+that renders notes to display
+end note
+
+note over browser:
+The user fill in the form
+end note
+
+note over browser:
+The user submit the note by using the save button
+end note
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+note over server:
+The server save the information that comes from the browser 
+inside the notes array.
+Also the server responds with HTTP status code 302 (redirect)
+end note
+server-->browser: REDIRECT TO https://studies.cs.helsinki.fi/exampleapp/notes (HTTP 302 Status code)
+note over browser:
+The browser reloads the Notes page, this creates 3 new HTTP requests. 
+
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{content: "hello", date: "2021-11-09T12:27:46.693Z"},…]
+
+note over browser:
+Now, the notes array contains the new note written by the user
+end note
+
