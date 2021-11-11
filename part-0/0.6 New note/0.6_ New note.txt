@@ -1,0 +1,35 @@
+title 0.6: New note
+
+actor user
+user->browser: Go to https://studies.cs.helsinki.fi/exampleapp/spa
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+server-->browser: Return the exact HTML code (file) for every request
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: Return main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+server-->browser: Return spa.js
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: Return [{"content":"","date":"2021-11-09T19:30:52.277Z"},...]
+note over server:
+The server deliver the single page and all assets that the application needs when a browser requests them
+end note
+note over browser:
+In a SPA we can have more than one view but we can only have one page.
+end note
+browser-->user: Render the notes application
+user->browser: User fill in the form 
+user->browser: User submit the form by clicking the save button 
+
+browser->server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over browser:
+The browser sends only one request to the server
+end note
+note over server:
+The server responds with 201 Status (new resource was created)
+end note
+note over browser: 
+The browser stays on the same page
+end note 
+server-->browser: The note was added to the note list array  
+
+browser-->user: Javascript render the notes list with all the new notes
