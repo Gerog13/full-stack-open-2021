@@ -1,0 +1,19 @@
+title 0.5: Single page app
+
+actor user
+user->browser: Go to https://studies.cs.helsinki.fi/exampleapp/spa
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+server-->browser: Return the exact HTML code (file) for every request
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: Return main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+server-->browser: Return spa.js
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: Return [{"content":"","date":"2021-11-09T19:30:52.277Z"},...]
+note over server:
+The server deliver the single page and all assets that the application needs when a browser requests them
+end note
+note over browser:
+In a SPA we can have more than one view but we can only have one page.
+end note
+browser->user: Render the notes application
