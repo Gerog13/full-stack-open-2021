@@ -5,12 +5,18 @@ const Button = ({ handleClick, text }) => {
 };
 
 const DisplayValues = ({ good, neutral, bad }) => {
+  let allStatistics = good + neutral + bad;
+  let average = (good - bad) / allStatistics;
+  let positive = good / allStatistics * 100;
   return (
     <div>
       <h3>Statistics</h3>
       <p>Good {good}</p>
       <p>Neutral {neutral}</p>
       <p>Bad {bad}</p>
+      <p>All {allStatistics}</p>
+      <p>Average {isNaN(average) ? '' : average}</p>
+      <p>Positive {isNaN(positive) ? '' : `${positive} %`}</p>
     </div>
   );
 };
