@@ -7,6 +7,7 @@ const Button = ({ handleClick, text }) => {
 const DisplayValues = ({ good, neutral, bad }) => {
   return (
     <div>
+      <h3>Statistics</h3>
       <p>Good {good}</p>
       <p>Neutral {neutral}</p>
       <p>Bad {bad}</p>
