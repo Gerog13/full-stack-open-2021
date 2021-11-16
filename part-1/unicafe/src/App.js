@@ -1,8 +1,18 @@
 import React, { useState } from "react";
 
-const Button = ({ handleClick, text }) => {
-  return <button onClick={handleClick}>{text}</button>;
-};
+const Button = ({ handleClick, text }) => <button onClick={handleClick}>{text}</button>;
+
+const StatisticLine  = ({value, text}) => {
+  return (
+    <>
+      {text === 'Positive' ? (
+        <p>{text} {value} %</p>
+      ) : (
+        <p>{text} {value}</p>
+      )}
+    </>
+  )
+} 
 
 const Statistics = ({ good, neutral, bad }) => {
   let allStatistics = good + neutral + bad;
@@ -10,13 +20,12 @@ const Statistics = ({ good, neutral, bad }) => {
   let positive = good / allStatistics * 100;
   return (
     <div>
-      <h3>Statistics</h3>
-      <p>Good {good}</p>
-      <p>Neutral {neutral}</p>
-      <p>Bad {bad}</p>
-      <p>All {allStatistics}</p>
-      <p>Average {isNaN(average) ? '' : average}</p>
-      <p>Positive {isNaN(positive) ? '' : `${positive} %`}</p>
+      <StatisticLine value={good} text='Good'/>
+      <StatisticLine value={neutral} text='Neutral'/>
+      <StatisticLine value={bad} text='Bad'/>
+      <StatisticLine value={allStatistics} text='All'/>
+      <StatisticLine value={average} text='Average'/>
+      <StatisticLine value={positive} text='Positive'/>
     </div>
   );
 };
