@@ -23,21 +23,34 @@ const App = () => {
   });
 
   const voteAnecdoteHandler = (idAnecdote) => {
-    setPoints({...points, [idAnecdote]: points[idAnecdote] + 1 });
+    setPoints({ ...points, [idAnecdote]: points[idAnecdote] + 1 });
   };
+
+  let maxPoint = points[0];
+  maxPoint = Math.max(...Object.values(points));
+  let anecdoteWithMostVotes = Object.keys(Object.values(points)).find(
+    (key) => Object.values(points)[key] === maxPoint
+  );
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {points[selected]} votes</p>
-      <button onClick={() => voteAnecdoteHandler(selected)}>Vote</button>
-      <button
-        onClick={() =>
-          setSelected(Math.floor(Math.random() * anecdotes.length))
-        }
-      >
-        Next anecdote
-      </button>
+      <section>
+        <h2>Anecdote of the day</h2>
+        <p>{anecdotes[selected]}</p>
+        <p>has {points[selected]} votes</p>
+        <button onClick={() => voteAnecdoteHandler(selected)}>Vote</button>
+        <button
+          onClick={() =>
+            setSelected(Math.floor(Math.random() * anecdotes.length))
+          }
+        >
+          Next anecdote
+        </button>
+      </section>
+      <section>
+        <h3>Anecdote with most votes</h3>
+        <p>{anecdotes[anecdoteWithMostVotes]}</p>
+      </section>
     </div>
   );
 };
