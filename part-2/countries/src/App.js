@@ -22,7 +22,7 @@ function App() {
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
       />
-      <FilteredCountries countries={filteredCountries} countriesLength={filteredCountries.length}/>
+      <FilteredCountries countries={filteredCountries} countriesLength={filteredCountries.length} filter={filter} />
     </div>
   );
 }
