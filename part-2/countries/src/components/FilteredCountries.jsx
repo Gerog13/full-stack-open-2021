@@ -65,7 +65,6 @@ const FilteredCountries = ({ countries, countriesLength, filter }) => {
           `https://api.openweathermap.org/data/2.5/weather?q=${filter}&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}&units=metric`
         )
         .then((response) => {
-          console.log(response);
           setWeather(response);
         });
     }, 1000);
