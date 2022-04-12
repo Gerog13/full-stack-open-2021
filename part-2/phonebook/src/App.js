@@ -4,17 +4,29 @@ import Filter from "./components/SearchFilter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 
+const Notification = ({ message }) => {
+  if (message === null) return null;
+  const styles = {
+    border:
+      message.type === "success" ? "2px solid #A1E5AB" : "2px solid #D1495B",
+    background: "#e6e6e6",
+    padding: "12px",
+    height: "1.2rem",
+    borderRadius: "6px",
+    fontSize: "1.2rem",
+    margin: "10px 0",
+    color: message.type === "success" ? "#065143" : "#7A2B35",
+    fontWeight: "900",
+  };
+  return <div style={styles}>{message.content}</div>;
+};
+
 const App = () => {
-  // const [persons, setPersons] = useState([
-  //   { name: "Arto Hellas", number: "040-123456", id: 1 },
-  //   { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
-  //   { name: "Dan Abramov", number: "12-43-234345", id: 3 },
-  //   { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
-  // ]);
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((persons) => setPersons(persons));
@@ -39,11 +51,28 @@ const App = () => {
         const newData = { ...person, number: phoneNumber };
         personService
           .updatePhoneNumber(person.id, newData)
-          .then((updatedPerson) =>
+          .then((updatedPerson) => {
             setPersons(
               persons.map((p) => (p.id !== person.id ? p : updatedPerson))
-            )
-          );
+            );
+            setMessage({
+              content: `Updated ${person.name} successfully!`,
+              type: "success",
+            });
+            setTimeout(() => {
+              setMessage(null);
+            }, 3000);
+          })
+          .catch((error) => {
+            setMessage({
+              content: `Information of ${person.name} has already beeen removed from server.`,
+              type: "error",
+            });
+            setTimeout(() => {
+              setMessage(null);
+            }, 3000);
+            setPersons(persons.filter(p => p.id !== person.id))
+          });
         setNewName("");
         setPhoneNumber("");
         return;
@@ -58,10 +87,13 @@ const App = () => {
       .create(personObject)
       .then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
 
-    // setPersons([
-    //   ...persons,
-    //   { name: newName, number: phoneNumber, id: Math.random() },
-    // ]);
+    setMessage({
+      content: `Add ${newName} successfully!`,
+      type: "success",
+    });
+    setTimeout(() => {
+      setMessage(null);
+    }, 3000);
     setNewName("");
     setPhoneNumber("");
   };
@@ -74,6 +106,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter filter={filter} setFilter={setFilter} />
       <h3>Add a new</h3>
       <PersonForm
