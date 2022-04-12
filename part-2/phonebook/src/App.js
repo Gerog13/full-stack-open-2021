@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import  personService from './services/index'
+import personService from "./services/index";
 import Filter from "./components/SearchFilter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import axios from 'axios';
 
 const App = () => {
   // const [persons, setPersons] = useState([
@@ -12,14 +11,14 @@ const App = () => {
   //   { name: "Dan Abramov", number: "12-43-234345", id: 3 },
   //   { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
   // ]);
-  const [persons, setPersons] = useState([])
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    personService.getAll().then(persons => setPersons(persons))
-  }, [])
+    personService.getAll().then((persons) => setPersons(persons));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -29,13 +28,35 @@ const App = () => {
     }
 
     let nameExists =
-      persons?.filter((person) => person.name === newName).length > 0;
+      persons?.filter((person) => person.name === newName.trim()).length > 0;
     if (nameExists) {
-      alert(`${newName} is already added to phonebook`);
-      return;
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const person = persons.find((p) => p.name === newName.trim());
+        const newData = { ...person, number: phoneNumber };
+        personService
+          .updatePhoneNumber(person.id, newData)
+          .then((updatedPerson) =>
+            setPersons(
+              persons.map((p) => (p.id !== person.id ? p : updatedPerson))
+            )
+          );
+        setNewName("");
+        setPhoneNumber("");
+        return;
+      }
     }
-    const personObject = { name: newName, number: phoneNumber, id: Math.random() }
-    personService.create(personObject).then(returnedPerson => setPersons(persons.concat(returnedPerson)))
+    const personObject = {
+      name: newName.trim(),
+      number: phoneNumber.trim(),
+      id: Math.random(),
+    };
+    personService
+      .create(personObject)
+      .then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
 
     // setPersons([
     //   ...persons,
@@ -63,7 +84,11 @@ const App = () => {
         setPhoneNumber={setPhoneNumber}
       />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} />
+      <Persons
+        personsToShow={personsToShow}
+        setPersons={setPersons}
+        persons={persons}
+      />
     </div>
   );
 };
